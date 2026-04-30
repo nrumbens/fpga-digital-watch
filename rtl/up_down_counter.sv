@@ -14,6 +14,7 @@ module up_down_counter #(
   logic [WIDTH-1:0] next_count;
   initial count = '0;
 
+  // next state logic (if up then count up otherwise count down)
   always_comb begin
     if (enable) begin
       if (up) begin
