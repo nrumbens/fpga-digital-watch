@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
-// Increments time so that when seconds wrap around to 0 the minutes will
-// increment and when minutes wrap around to 0 hours will increment
+// Increments time so that when seconds rollover to 0 the minutes will
+// increment and when minutes rollover to 0 hours will increment
 //
 // Parameters :
 // N_HOURS - default number of hours is 24
@@ -12,7 +12,7 @@
 // W_SECONDS - width needed to output seconds (default is 6 to represent 60)
 //
 // Ports :
-// clk
+// clk - all flip flops trigger on rising edge
 // enable - when low seconds, minutes and hours stay the same, when high
 // increments
 // hours - the number of hours that have passed

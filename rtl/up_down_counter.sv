@@ -7,9 +7,9 @@
 // WIDTH number of bits needed to display the maximum number
 //
 // Ports:
-// clk - (?)
-// enable - when high the counter will count up/down otherwise will remain
-// on same number
+// clk - all flip flops trigger on rising edge
+// enable - when high the counter will count up/down on the next rising edge
+// otherwise will remain on same number
 // up - 1 indicates counting upwards, 0 indicates counting down
 // count - outputs the current number
 

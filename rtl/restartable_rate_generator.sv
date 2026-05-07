@@ -6,7 +6,7 @@
 // outputting a rising edge
 //
 // Ports :
-// clk -
+// clk - all flip flops trigger on rising edge
 // run - when low tick is low, when high will increment the count
 // tick - high when run is high and has been high for CYCLE_COUNT - 1 cycles
 
@@ -19,8 +19,10 @@ module restartable_rate_generator #(
 );
   logic tick_qualifier;
   logic running = 1'b0;
+
   always_ff @(posedge clk) running <= run;
 
+  // tick is only valid if still running
   assign tick = running && tick_qualifier;
 
   generate
@@ -40,12 +42,18 @@ module restartable_rate_generator #(
           .count(count)
       );
 
+      // resets if run is low or if tick was just high
       assign rst_count = !run || tick_qualifier;
+
+      // counts only increases when run is high
       assign enable_count = run;
+
+      // goes high when counter hits CYCLE_COUNT - 1
       assign tick_qualifier = (count == CountWidth'(CYCLE_COUNT - 1));
 
 
     end else begin : g_special
+      // if cycle count is 1 tick every cycle
       assign tick_qualifier = 1'b1;
     end
   endgenerate

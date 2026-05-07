@@ -1,5 +1,19 @@
 `timescale 1ns / 1ps
 
+// Module for time display on DEI-SOC board. The seconds will increase everytime
+// tick is high (which is determined by a switch) and each seven segment display
+// will rollover once they have reached their maximum value and increment the
+// next higher counting unit
+//
+// Parameters :
+// CYCLES_PER_SECOND - input clock frequency (50MHz as default)
+//
+// Ports :
+// CLOCK_50 - 50MHz clock, syncs all flip flops (to have same rising edges)
+// SW - speed selector (1Hz, 25Hz, 1kHz, 50MHz)
+// HEX(0-5) - seven segment display
+
+
 module top_time_display_v1 #(
     parameter int CYCLES_PER_SECOND = 50_000_000
 ) (
