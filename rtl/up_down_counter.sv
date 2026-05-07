@@ -1,5 +1,18 @@
 `timescale 1ns / 1ps
 
+// Increments count when up is high and deincrements count when up is low
+//
+// Parameters:
+// MAX for maximum number counted to (or from), default is 2, can be overriden
+// WIDTH number of bits needed to display the maximum number
+//
+// Ports:
+// clk - (?)
+// enable - when high the counter will count up/down otherwise will remain
+// on same number
+// up - 1 indicates counting upwards, 0 indicates counting down
+// count - outputs the current number
+
 module up_down_counter #(
     parameter int MAX   = 2,
     parameter int WIDTH = 2

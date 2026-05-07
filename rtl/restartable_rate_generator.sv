@@ -1,4 +1,14 @@
 `timescale 1ns / 1ps
+// Generates a rising edge every time count reaches the cycle count
+//
+// Parameters :
+// CYCLE_COUNT - the number of cycles that run must remain high before
+// outputting a rising edge
+//
+// Ports :
+// clk -
+// run - when low tick is low, when high will increment the count
+// tick - high when run is high and has been high for CYCLE_COUNT - 1 cycles
 
 module restartable_rate_generator #(
     parameter int CYCLE_COUNT = 2

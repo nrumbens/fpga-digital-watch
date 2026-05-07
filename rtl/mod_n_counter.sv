@@ -1,4 +1,15 @@
 `timescale 1ns / 1ps
+// counts from 0 to N - 1 when enable is high
+//
+// Parameters :
+// N - determines the maximum number counted to (maximum number will be N - 1)
+// WIDTH - the number of bits needed to display the maximum number counted to
+//
+// Ports :
+// clk -
+// rst - resets count
+// enable - if low count stays the same, if high count advances
+// count - outputs the current number
 
 module mod_n_counter #(
     parameter int N = 4,
