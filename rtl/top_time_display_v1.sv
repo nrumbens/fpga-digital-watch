@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 // Module for time display on DEI-SOC board. The seconds will increase everytime
-// tick is high (which is determined by a switch) and each seven segment display
+// tick is high (which is determined by 2 switches) and each seven segment display
 // will rollover once they have reached their maximum value and increment the
 // next higher counting unit
 //
@@ -43,6 +43,7 @@ module top_time_display_v1 #(
       .seconds(seconds)
   );
 
+  // selects tick rate based on the switch inputs
   always_comb begin
     case (SW)
       2'b00:   tick = tick_1Hz;
@@ -55,19 +56,21 @@ module top_time_display_v1 #(
   // ticks every clock cycle so always high
   assign tick_50MHz = 1'b1;
 
-
+  // creates tick pulses at 1Hz frequency (from 50MHz source)
   restartable_rate_generator #(CYCLES_PER_SECOND) rate_1Hz (
       .clk (CLOCK_50),
       .run (1'b1),
       .tick(tick_1Hz)
   );
 
+  // creates tick pulses at 25Hz frequency (from 50MHz source)
   restartable_rate_generator #(CYCLES_PER_SECOND / 25) rate_25Hz (
       .clk (CLOCK_50),
       .run (1'b1),
       .tick(tick_25Hz)
   );
 
+  // creates tick pulses at 1kHz frequency (from 50MHz source)
   restartable_rate_generator #(CYCLES_PER_SECOND / 1000) rate_1kHz (
       .clk (CLOCK_50),
       .run (1'b1),
@@ -75,17 +78,21 @@ module top_time_display_v1 #(
   );
 
 
-
+  // converts 5 bit binary hours to two 4 bit ones and tens digits
   binary_to_bcd hours_bcd (
       .bin ({2'b0, hours}),
       .tens(hours_tens),
       .ones(hours_ones)
   );
+
+  // converts 6 bit binary minutes to two 4 bit ones and tens digits
   binary_to_bcd minutes_bcd (
       .bin ({1'b0, minutes}),
       .tens(minutes_tens),
       .ones(minutes_ones)
   );
+
+  // converts 6 bit binary seconds to two 4 bit ones and tens digits
   binary_to_bcd seconds_bcd (
       .bin ({1'b0, seconds}),
       .tens(seconds_tens),
@@ -95,7 +102,7 @@ module top_time_display_v1 #(
 
 
 
-
+  // maps digits into seven segment displays
   seven_segment second_ones_digit (
       .digit(seconds_ones),
       .blank(1'b0),
