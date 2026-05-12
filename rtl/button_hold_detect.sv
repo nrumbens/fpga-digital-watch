@@ -1,4 +1,17 @@
 `timescale 1ns / 1ps
+// Detects when a button has been held for HOLD_CYCLES clock cycles and produces
+// a high signal output when the hold time has been reached
+//
+// Parameters :
+// HOLD_CYCLES - the number of cycles the button must be held for
+//
+// Ports :
+// clk - all flip flops trigger on rising edge
+// button - input signal
+// held - output signal that goes high once button has been held for HOLD_CYCLES
+// cycles
+
+
 module button_hold_detect #(
     parameter int HOLD_CYCLES = 50_000_000
 ) (
