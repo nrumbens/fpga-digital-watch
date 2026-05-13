@@ -16,7 +16,7 @@
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
 
-module user_top_watch_v2 #(
+module user_top_watch_v3 #(
     parameter int CYCLES_PER_SECOND = 50_000_000
 ) (
     input logic clk,
@@ -104,18 +104,6 @@ module user_top_watch_v2 #(
       .tick(seconds_tick)
   );
 
-  // only edit when in seconds edit mode
-  assign seconds_edit = 1'b0;
-  assign seconds_inc = 1'b0;
-  assign seconds_dec = 1'b0;
-
-  assign minutes_edit = 1'b0;
-  assign minutes_inc = 1'b0;
-  assign minutes_dec = 1'b0;
-
-  assign hours_edit = 1'b0;
-  assign hours_inc = 1'b0;
-  assign hours_dec = 1'b0;
 
 
   assign minutes_tick = seconds_tick && (seconds == 6'd59);
@@ -157,5 +145,50 @@ module user_top_watch_v2 #(
   assign blank_hours   = mode_enable[2] && pwm_out;
   assign blank_minutes = mode_enable[1] && pwm_out;
   assign blank_seconds = mode_enable[0] && pwm_out;
+
+  // - - - - - - - - - - - - - -
+  // Editing watch
+  // - - - - - - - - - - - - - -
+
+
+  // increment pulse (speeds up when button held for more than 0.5s)
+  logic inc_pulse;
+  button_auto_repeat #(
+      .HOLD_CYCLES  (CYCLES_PER_SECOND / 2),
+      .REPEAT_CYCLES(CYCLES_PER_SECOND / 10)
+  ) u_increment (
+      .clk(clk),
+      .button(button[1]),
+      .pulse(inc_pulse)
+  );
+
+
+  // decrement pulse (speeds up when button held for more than 0.5s)
+  logic dec_pulse;
+  button_auto_repeat #(
+      .HOLD_CYCLES  (CYCLES_PER_SECOND / 2),
+      .REPEAT_CYCLES(CYCLES_PER_SECOND / 10)
+  ) u_decrement (
+      .clk(clk),
+      .button(button[0]),
+      .pulse(dec_pulse)
+  );
+
+
+  // only edit when in seconds edit mode
+  assign seconds_edit = mode_enable[0];
+  assign seconds_inc = mode_enable[0] && inc_pulse;
+  assign seconds_dec = mode_enable[0] && dec_pulse;
+
+
+  assign minutes_edit = mode_enable[1];
+  assign minutes_inc = mode_enable[1] && inc_pulse;
+  assign minutes_dec = mode_enable[1] && dec_pulse;
+
+
+  assign hours_edit = mode_enable[2];
+  assign hours_inc = mode_enable[2] && inc_pulse;
+  assign hours_dec = mode_enable[2] && dec_pulse;
+
 
 endmodule
