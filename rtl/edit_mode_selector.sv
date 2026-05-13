@@ -50,10 +50,10 @@ module edit_mode_selector #(
 
   // Counter runs only while armed ; resets when disarmed
   assign enable_counter = armed && press;
-  assign reset_counter = disarm;
+  assign reset_counter = !armed;
 
   // Disarm on the press that steps past the last mode
-  assign disarm = press && (count == 2'(2));  // Fill this in
+  assign disarm = press && (count == 2'd2);  // Fill this in
 
   // Output logic
   assign mode_enable = armed ? (3'b001 << count) : 3'b000;
