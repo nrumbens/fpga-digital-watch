@@ -1,3 +1,10 @@
+// Top level module that maps physical board inputs and outputs to internal
+// signals.
+// Ensures that button inputs are synchronised with the clock by
+// instantiating the key_synchroniser module.
+// Instantiates decimal_display_driver to convert the hours, minutes and
+// seconds into seven-segment display outputs.
+
 // ------------------------------------------------------------------
 // Board wrapper for the DE1-SoC.
 //

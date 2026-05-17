@@ -1,4 +1,20 @@
 `timescale 1ns / 1ps
+// Produces an immediate pulse when button has been pressed and will produce a
+// pulse every REPEAT_CYCLES when the button has been held for HOLD_CYCLES
+//
+// Parameters :
+// HOLD_CYCLES - the number of cycles the button must be held for to create a
+// pulse train
+// REPEAT_CYCLES - the number of cycles between each repeated pulse (when
+// creating a pulse train)
+//
+// Ports :
+// clk - all flip flops trigger on rising edge
+// button - input signal
+// pulse - output signal that goes high immediately and pulses repeatedly when
+// the button has been held for HOLD_CYCLES
+
+
 module button_auto_repeat #(
     parameter int HOLD_CYCLES   = 50_000_000,
     // REPEAT_CYCLES must be smaller than HOLD_CYCLES
@@ -20,7 +36,8 @@ module button_auto_repeat #(
   );
 
 
-  // first repeat pulse should occur at time HOLD_CYCLES so subtract REPEAT_CYCLES
+  // make held signal rise early so that that the first pulse occurse at time
+  // HOLD_CYCLES not HOLD_CYCLES + REPEAT_CYCLES
   button_hold_detect #(
       .HOLD_CYCLES(HOLD_CYCLES - REPEAT_CYCLES + 1)
   ) u_detect (
@@ -29,6 +46,7 @@ module button_auto_repeat #(
       .held(held)
   );
 
+  // gives pulse rate (every REPEAT_CYCLES)
   restartable_rate_generator #(
       .CYCLE_COUNT(REPEAT_CYCLES)
   ) u_rate_generator (

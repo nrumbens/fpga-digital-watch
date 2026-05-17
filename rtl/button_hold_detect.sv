@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 // Detects when a button has been held for HOLD_CYCLES clock cycles and produces
-// a high signal output when the hold time has been reached
+// a high output signal when the hold time has been reached
 //
 // Parameters :
 // HOLD_CYCLES - the number of cycles the button must be held for

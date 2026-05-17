@@ -1,4 +1,19 @@
 `timescale 1ns / 1ps
+// When a button has been held for HOLD_CYCLES the button becomes armed and
+// allows additional presses of the button to cycle through edit modes (editing
+// seconds, minutes, hours). Disarms when the button is pressed again after
+// being in hours edit mode.
+//
+// Parameters :
+// HOLD_CYCLES - the number of cycles the button must be held for to become
+// armed
+//
+// Ports :
+// clk - all flip flops trigger on rising edge
+// button - input signal that enters armed when held and advances edit mode
+// in subsequent presses
+// mode_enable - output signal indicating the current edit mode
+
 
 module edit_mode_selector #(
     parameter int HOLD_CYCLES = 50_000_000
@@ -48,12 +63,14 @@ module edit_mode_selector #(
   );
 
 
-  // Counter runs only while armed ; resets when disarmed
+
+  // Counter increments only while armed and button pressed
   assign enable_counter = armed && press;
+  // Counter resets when disarmed
   assign reset_counter = !armed;
 
   // Disarm on the press that steps past the last mode
-  assign disarm = press && (count == 2'd2);  // Fill this in
+  assign disarm = press && (count == 2'd2);
 
   // Output logic
   assign mode_enable = armed ? (3'b001 << count) : 3'b000;

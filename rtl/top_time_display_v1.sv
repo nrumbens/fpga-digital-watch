@@ -49,6 +49,7 @@ module top_time_display_v1 #(
       2'b00:   tick = tick_1Hz;
       2'b01:   tick = tick_25Hz;
       2'b10:   tick = tick_1kHz;
+      2'b11:   tick = tick_50MHz;
       default: tick = tick_50MHz;
     endcase
   end
