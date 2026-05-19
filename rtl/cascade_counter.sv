@@ -15,9 +15,9 @@
 // clk - all flip flops trigger on rising edge
 // rst - resets all counters to 0
 // enable - when counters stay the same, when high increments
-// hours - least signficant count
-// minutes - middle count
-// seconds - most signficant count
+// count2 - least signficant count
+// count1 - middle count
+// count0 - most signficant count
 
 module cascade_counter #(
     parameter int N2 = 3,
