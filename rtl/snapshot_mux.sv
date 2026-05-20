@@ -12,6 +12,7 @@ module snapshot_mux #(
   logic [WIDTH - 1:0] stored;
   initial stored = '0;
 
+  // save the stored value
   always_ff @(posedge clk) begin
     if (!hold) begin
       stored <= d;
