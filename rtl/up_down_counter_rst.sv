@@ -46,7 +46,7 @@ module up_down_counter_rst #(
   end
 
   always_ff @(posedge clk)
-    if (rst) count <= 1'b0;
+    if (rst) count <= '0;
     else if (enable) count <= next_count;
 
 
