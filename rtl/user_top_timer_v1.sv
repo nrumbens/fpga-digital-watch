@@ -146,9 +146,12 @@ module user_top_timer_v1 #(
   logic running = 1'b0, next_running;
 
   always_ff @(posedge clk)
-    if (at_zero || mode_enable != 0) running <= 1'b0;
+    // don't run if timer at zero or in edit mode
+    if (at_zero || mode_enable != 0)
+      running <= 1'b0;
     else running <= next_running;
 
+  // when start/stop pressed start/stop running
   assign next_running = start_stop_pulse ? !running : running;
 
 

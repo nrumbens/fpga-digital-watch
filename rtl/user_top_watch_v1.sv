@@ -1,20 +1,8 @@
-// ------------------------------------------------------------------
-// WARNING: This file is used by the automated test suite. Do not
-// modify it.
-//
-// This file also serves as a template for your own designs. To use
-// it:
-//   1. Copy the entire contents into a new file with a descriptive
-//      name.
-//   2. Delete the test logic below and replace it with your own
-//      code.
-//   3. In top_de1_soc, change the module name from user_top to your
-//      new module name.
-//
-//   The board wrapper sets CYCLES_PER_SECOND; use this parameter in
-//   your design wherever timing is needed.
-// ------------------------------------------------------------------
 `timescale 1ns / 1ps
+// Top level digital watch module
+// Counts seconds, minutes and hours where second counter increments at 1Hz. No
+// edit functionality.
+
 
 module user_top_watch_v1 #(
     /* verilator lint_off UNUSEDPARAM */
