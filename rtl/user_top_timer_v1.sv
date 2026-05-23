@@ -1,4 +1,7 @@
 `timescale 1ns / 1ps
+// Top level timer module with start/stop button and editable hours, minutes
+// and seconds
+
 
 module user_top_timer_v1 #(
     parameter int CYCLES_PER_SECOND = 50_000_000
@@ -38,7 +41,7 @@ module user_top_timer_v1 #(
   );
 
 
-  // Edit mode selecting
+  // Edit mode selecting can only be entered when timer is stopped
   logic [2:0] mode_enable;
 
   edit_mode_selector #(
@@ -56,8 +59,7 @@ module user_top_timer_v1 #(
   restartable_rate_generator #(
       .CYCLE_COUNT(CYCLES_PER_SECOND)
   ) u_1_Hz (
-      .clk(clk),
-
+      .clk (clk),
       // keeps timer at 0 unless time is running
       .run (running),
       .tick(tick1Hz)
@@ -66,7 +68,7 @@ module user_top_timer_v1 #(
 
 
 
-  // button auto repeat
+  // continusoly increment/decrment when button held
   logic inc_pulse;
   button_auto_repeat #(
       .HOLD_CYCLES  (CYCLES_PER_SECOND / 2),
@@ -92,9 +94,9 @@ module user_top_timer_v1 #(
   logic [5:0] seconds;
   logic [5:0] minutes;
   logic [4:0] hours;
-  //hours
-
   logic unused_borrow;
+
+  //hours countdown (wraps from 0 to 23)
   editable_countdown #(
       .MAX  (23),
       .WIDTH(5)
@@ -109,7 +111,7 @@ module user_top_timer_v1 #(
       .borrow_out(unused_borrow)
   );
 
-  // minutes
+  // decrement counter (when seconds wrap)
   editable_countdown #(
       .MAX  (59),
       .WIDTH(6)
@@ -124,7 +126,7 @@ module user_top_timer_v1 #(
       .borrow_out(borrow_min)
   );
 
-  // seconds
+  // decrements once a second
   editable_countdown #(
       .MAX  (59),
       .WIDTH(6)
@@ -141,9 +143,10 @@ module user_top_timer_v1 #(
 
 
 
-  // FSM (state is a single bit for running)
+  // Detect when timer value is zero
   wire at_zero = (hours == 0) && (minutes == 0) && (seconds == 0);
   logic running = 1'b0, next_running;
+
 
   always_ff @(posedge clk)
     // don't run if timer at zero or in edit mode
@@ -173,7 +176,7 @@ module user_top_timer_v1 #(
   assign hours_dec = mode_enable[2] && dec_pulse;
 
 
-
+  // edit mode blinks the selected field
   logic pwm_out;
   pwm_generator #(
       .PERIOD_CYCLES(CYCLES_PER_SECOND / 2),
