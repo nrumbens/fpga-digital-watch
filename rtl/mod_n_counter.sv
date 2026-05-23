@@ -30,9 +30,11 @@ module mod_n_counter #(
     if (rst) count <= '0;
     else if (enable) count <= next_count;
 
+  localparam logic [WIDTH-1:0] Limit = Max - 1'b1;
+
   // if the maximum value has been reached wrap around
-  always_comb begin
-    next_count = (count < Max - WIDTH'(1)) ? count + WIDTH'(1) : '0;
-  end
+
+  assign next_count = (count < Limit) ? count + WIDTH'(1) : '0;
+
 
 endmodule
