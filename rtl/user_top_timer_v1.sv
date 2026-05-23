@@ -30,6 +30,7 @@ module user_top_timer_v1 #(
   logic seconds_edit, seconds_inc, seconds_dec;
   logic minutes_edit, minutes_inc, minutes_dec;
   logic hours_edit, hours_inc, hours_dec;
+  logic running = 1'b0, next_running;
 
 
   // button risinge edges (for pause/start)
@@ -145,7 +146,6 @@ module user_top_timer_v1 #(
 
   // Detect when timer value is zero
   wire at_zero = (hours == 0) && (minutes == 0) && (seconds == 0);
-  logic running = 1'b0, next_running;
 
 
   always_ff @(posedge clk)

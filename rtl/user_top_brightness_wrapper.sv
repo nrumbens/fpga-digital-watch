@@ -48,10 +48,12 @@ module user_top_brightness_wrapper #(
       .count(pwm_count)
   );
 
+  logic [1:0] brightness_sel;
+  assign brightness_sel = sw[9:8];
 
   logic [Width -1:0] duty;
   always_comb begin
-    case (sw[9:8])
+    case (brightness_sel)
       2'b00:   duty = Width'(Period / 8);  //12.5%
       2'b01:   duty = Width'(Period / 4);  //25%
       2'b11:   duty = Width'(Period / 2);  //50%

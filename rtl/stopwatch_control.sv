@@ -28,17 +28,18 @@ module stopwatch_control (
   logic next_counter_enable;
   logic next_lap_hold;
 
+  // ensure only one button press happens at a time
+  logic valid_start;
+  logic valid_lap;
+  assign valid_start = rise_start_stop && !rise_lap;
+  assign valid_lap   = !rise_start_stop && rise_lap;
+
   initial begin
     counter_rst = 1'b0;
     counter_enable = 1'b0;
     lap_hold = 1'b0;
   end
 
-  // ensure only one button press happens at a time
-  logic valid_start;
-  logic valid_lap;
-  assign valid_start = rise_start_stop && !rise_lap;
-  assign valid_lap   = !rise_start_stop && rise_lap;
 
 
 
