@@ -1,4 +1,7 @@
 `timescale 1ns / 1ps
+// Controls brightness to be 12.5%, 25%, 50% or full brightness controlled by
+// switches
+
 
 module user_top_brightness_wrapper #(
     parameter int CYCLES_PER_SECOND = 50_000_000
@@ -18,6 +21,7 @@ module user_top_brightness_wrapper #(
 );
   logic app_blank_hours, app_blank_minutes, app_blank_seconds;
 
+  // get blank signals from the app used
   user_top #(
       .CYCLES_PER_SECOND(CYCLES_PER_SECOND)
   ) u_app (
@@ -38,6 +42,8 @@ module user_top_brightness_wrapper #(
   localparam int Width = $clog2(Period + 1);
   logic [Width - 1:0] pwm_count;
 
+  // counts the period (1ms) then wraps to 0 (used to find proporiton of cycle
+  // output is on vs blank)
   mod_n_counter #(
       .N(Period),
       .WIDTH(Width)
@@ -48,6 +54,8 @@ module user_top_brightness_wrapper #(
       .count(pwm_count)
   );
 
+
+  // select brightness using switches 8 and 9
   logic [1:0] brightness_sel;
   assign brightness_sel = sw[9:8];
 
@@ -62,8 +70,11 @@ module user_top_brightness_wrapper #(
   end
 
   logic pwm_blank;
+  // have display on for first part of cycle (when less than duty) otherwise
+  // blank
   assign pwm_blank = (pwm_count >= duty);
 
+  // combines the app and brightness blanking
   assign blank_hours = app_blank_hours || pwm_blank;
   assign blank_minutes = app_blank_minutes || pwm_blank;
   assign blank_seconds = app_blank_seconds || pwm_blank;
