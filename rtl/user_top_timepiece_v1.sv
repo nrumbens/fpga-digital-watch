@@ -1,4 +1,6 @@
 `timescale 1ns / 1ps
+// Top level module that allows switching between watch, timer and stopwatch
+// depending on the switch 0 and 1 inputs
 
 module user_top_timepiece_v1 #(
     parameter int CYCLES_PER_SECOND = 50_000_000

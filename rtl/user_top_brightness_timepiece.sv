@@ -1,4 +1,9 @@
 `timescale 1ns / 1ps
+// Controls brightness of each app to be 12.5%, 25%, 50% or full brightness
+// controlled by switches.
+// Same as user top brightness wrapper just with user top timepiece instantiated
+// rather than the general user top
+
 
 module user_top_brightness_timepiece #(
     parameter int CYCLES_PER_SECOND = 50_000_000
